@@ -1,84 +1,393 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Grossiste Nova Life RP</title>
+
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#eef5ff;color:#132238}header{background:linear-gradient(135deg,#0757b8,#0b86ff);color:#fff;text-align:center;padding:32px 16px}h1{margin:0}main{max-width:1000px;margin:24px auto;padding:0 16px}.card{background:#fff;padding:20px;border-radius:16px;margin-bottom:18px;box-shadow:0 8px 25px #17375b12}h2{color:#0757b8}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.product{border:1px solid #d9e5f3;border-radius:12px;padding:15px;display:flex;justify-content:space-between;align-items:center;gap:10px}.price{font-weight:bold;color:#0757b8;margin-top:5px}.qty{display:flex;align-items:center;gap:8px}.qty button{border:0;background:#e8f2ff;color:#0757b8;border-radius:8px;padding:8px 12px;font-weight:bold}input,select,textarea{width:100%;padding:11px;border:1px solid #ccd9e8;border-radius:9px;box-sizing:border-box}label{font-weight:bold;font-size:14px;display:block;margin-bottom:6px}.total{text-align:right;font-size:23px;font-weight:bold;color:#0757b8;margin-top:18px}.btn{border:0;border-radius:9px;padding:13px 18px;background:#0757b8;color:#fff;font-weight:bold;cursor:pointer;margin-top:15px}.success{margin-top:15px;background:#e9f8ee;border:1px solid #9dd5ad;padding:14px;border-radius:10px;white-space:pre-wrap}@media(max-width:600px){.product{align-items:flex-start;flex-direction:column}.total{text-align:left}}
-</style></head>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#eef5ff;
+color:#132238
+}
+header{
+background:linear-gradient(135deg,#0757b8,#0b86ff);
+color:#fff;
+text-align:center;
+padding:32px 16px
+}
+h1{margin:0}
+main{
+max-width:1000px;
+margin:24px auto;
+padding:0 16px
+}
+.card{
+background:#fff;
+padding:20px;
+border-radius:16px;
+margin-bottom:18px;
+box-shadow:0 8px 25px #17375b12
+}
+h2{color:#0757b8}
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+gap:14px
+}
+.product{
+border:1px solid #d9e5f3;
+border-radius:12px;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
+}
+.price{
+font-weight:bold;
+color:#0757b8;
+margin-top:5px
+}
+.qty{
+display:flex;
+align-items:center;
+gap:8px
+}
+.qty button{
+border:0;
+background:#e8f2ff;
+color:#0757b8;
+border-radius:8px;
+padding:8px 12px;
+font-weight:bold
+}
+input,select,textarea{
+width:100%;
+padding:11px;
+border:1px solid #ccd9e8;
+border-radius:9px;
+box-sizing:border-box
+}
+label{
+font-weight:bold;
+font-size:14px;
+display:block;
+margin-bottom:6px
+}
+.total{
+text-align:right;
+font-size:23px;
+font-weight:bold;
+color:#0757b8;
+margin-top:18px
+}
+.btn{
+border:0;
+border-radius:9px;
+padding:13px 18px;
+background:#0757b8;
+color:#fff;
+font-weight:bold;
+cursor:pointer;
+margin-top:15px
+}
+.success{
+margin-top:15px;
+background:#e9f8ee;
+border:1px solid #9dd5ad;
+padding:14px;
+border-radius:10px;
+white-space:pre-wrap
+}
+@media(max-width:600px){
+.product{
+align-items:flex-start;
+flex-direction:column
+}
+.total{text-align:left}
+}
+</style>
+</head>
+
 <body>
-<header><h1>NOVA GROSSISTE</h1><p>Votre fournisseur professionnel sur Nova Life RP</p></header>
+
+<header>
+<h1>NOVA GROSSISTE</h1>
+<p>Votre fournisseur professionnel sur Nova Life RP</p>
+</header>
+
 <main>
-<div class="card"><h2>📦 Catalogue</h2><div id="products" class="grid"></div><div class="total">Total : <span id="total">0 €</span></div></div>
-<div class="card"><h2>🧾 Commander</h2><div class="grid">
-<div><label>Entreprise / Client *</label><input id="client"></div><div><label>Responsable *</label><input id="resp"></div>
-<div><label>Téléphone RP</label><input id="phone"></div><div><label>Discord</label><input id="discord"></div>
-<div><label>Réception</label><select id="delivery"><option>Livraison à domicile</option><option>Retrait sur place</option></select></div>
-<div><label>Date souhaitée</label><input id="date" type="date"></div></div>
-<div style="margin-top:14px"><label>Commentaire</label><textarea id="notes"></textarea></div>
-<button class="btn" onclick="sendOrder()">✅ Préparer ma commande</button><div id="result"></div></div>
+
+<div class="card">
+<h2>📦 Catalogue</h2>
+
+<div id="products" class="grid"></div>
+
+<div class="total">
+Total : <span id="total">0 €</span>
+</div>
+</div>
+
+<div class="card">
+
+<h2>🧾 Commander</h2>
+
+<div class="grid">
+
+<div>
+<label>Entreprise / Client *</label>
+<input id="client">
+</div>
+
+<div>
+<label>Responsable *</label>
+<input id="resp">
+</div>
+
+<div>
+<label>Téléphone RP</label>
+<input id="phone">
+</div>
+
+<div>
+<label>Discord</label>
+<input id="discord">
+</div>
+
+<div>
+<label>Réception</label>
+<select id="delivery">
+<option>Livraison à domicile</option>
+<option>Retrait sur place</option>
+</select>
+</div>
+
+<div>
+<label>Date souhaitée</label>
+<input id="date" type="date">
+</div>
+
+</div>
+
+<div style="margin-top:14px">
+<label>Commentaire</label>
+<textarea id="notes"></textarea>
+</div>
+
+<button class="btn" onclick="sendOrder()">
+✅ Envoyer ma commande
+</button>
+
+<div id="result"></div>
+
+</div>
+
 </main>
+
 <script>
+
 const products=[
- {name:"Batterie",price:500},{name:"Pneu",price:300},{name:"Pièce mécanique",price:250},{name:"Huile",price:150}
-];let cart={};
+{name:"Batterie",price:500},
+{name:"Pneu",price:300},
+{name:"Pièce mécanique",price:250},
+{name:"Huile",price:150}
+];
+
+let cart={};
+
 const euro=n=>new Intl.NumberFormat("fr-FR").format(n)+" €";
-function render(){let e=document.getElementById("products");e.innerHTML="";products.forEach((p,i)=>{let q=cart[i]||0;e.innerHTML+=`<div class="product"><div><b>${p.name}</b><div class="price">${euro(p.price)}</div></div><div class="qty"><button onclick="chg(${i},-1)">−</button><b>${q}</b><button onclick="chg(${i},1)">+</button></div></div>`});total()}
-function chg(i,d){cart[i]=Math.max(0,(cart[i]||0)+d);render()}
-function total(){let t=products.reduce((s,p,i)=>s+p.price*(cart[i]||0),0);document.getElementById("total").textContent=euro(t);return t}
+
+function render(){
+
+let e=document.getElementById("products");
+
+e.innerHTML="";
+
+products.forEach((p,i)=>{
+
+let q=cart[i]||0;
+
+e.innerHTML+=`
+
+<div class="product">
+
+<div>
+<b>${p.name}</b>
+<div class="price">${euro(p.price)}</div>
+</div>
+
+<div class="qty">
+
+<button onclick="chg(${i},-1)">−</button>
+
+<b>${q}</b>
+
+<button onclick="chg(${i},1)">+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+total();
+
+}
+
+function chg(i,d){
+
+cart[i]=Math.max(0,(cart[i]||0)+d);
+
+render();
+
+}
+
+function total(){
+
+let t=products.reduce(
+(s,p,i)=>s+p.price*(cart[i]||0),
+0
+);
+
+document.getElementById("total").textContent=euro(t);
+
+return t;
+
+}
+
+
 async function sendOrder(){
- let chosen=products.map((p,i)=>({p,i,q:cart[i]||0})).filter(x=>x.q);
- let c=document.getElementById("client").value.trim();
- let r=document.getElementById("resp").value.trim();
 
- if(!c||!r||!chosen.length){
-   alert("Renseigne le client, le responsable et ajoute au moins un produit.");
-   return;
- }
+let chosen=products
+.map((p,i)=>({p,i,q:cart[i]||0}))
+.filter(x=>x.q);
 
- let id="CMD-"+Math.random().toString(36).slice(2,8).toUpperCase();
+let c=document.getElementById("client").value.trim();
 
- let subtotal=chosen.reduce((s,x)=>s+x.p.price*x.q,0);
- let delivery=document.getElementById("delivery").value;
- let deliveryFee=delivery==="Livraison à domicile"?30:0;
- let t=subtotal+deliveryFee;
+let r=document.getElementById("resp").value.trim();
 
- let productText=chosen
-   .map(x=>`${x.p.name} x${x.q} — ${euro(x.p.price*x.q)}`)
-   .join("\n");
+if(!c||!r||!chosen.length){
 
- let payload={
-   id:id,
-   client:c,
-   responsable:r,
-   phone:document.getElementById("phone").value,
-   discord:document.getElementById("discord").value,
-   delivery:delivery,
-   deliveryFee:deliveryFee,
-   date:document.getElementById("date").value||"Non précisée",
-   products:productText,
-   total:t,
-   notes:document.getElementById("notes").value||"Aucun"
- };
+alert(
+"Renseigne le client, le responsable et ajoute au moins un produit."
+);
 
- try{
-   await fetch("https://script.google.com/macros/s/AKfycbwiefKmCIG6au5RX4CkEqvLCI8sn1ckHAhCo_cjyiWf87SOqn_7sW9L_LzICR0N8G-Vjg/exec",{
-     method:"POST",
-     headers:{"Content-Type":"text/plain;charset=utf-8"},
-     mode:"no-cors",
-     body:JSON.stringify(payload)
-   });
+return;
 
-   document.getElementById("result").innerHTML=
-   `<div class="success"><b>✅ Commande ${id} envoyée !</b>
+}
+
+
+let id="CMD-"+
+Math.random()
+.toString(36)
+.slice(2,8)
+.toUpperCase();
+
+
+let subtotal=chosen.reduce(
+(s,x)=>s+x.p.price*x.q,
+0
+);
+
+
+let delivery=
+document.getElementById("delivery").value;
+
+
+let deliveryFee=
+delivery==="Livraison à domicile"
+?30
+:0;
+
+
+let t=subtotal+deliveryFee;
+
+
+let productText=chosen
+.map(x=>`${x.p.name} x${x.q} — ${euro(x.p.price*x.q)}`)
+.join("\n");
+
+
+let payload={
+
+id:id,
+
+client:c,
+
+responsable:r,
+
+phone:document.getElementById("phone").value,
+
+discord:document.getElementById("discord").value,
+
+delivery:delivery,
+
+deliveryFee:deliveryFee,
+
+date:document.getElementById("date").value
+||"Non précisée",
+
+products:productText,
+
+total:t,
+
+notes:document.getElementById("notes").value
+||"Aucun"
+
+};
+
+
+try{
+
+await fetch(
+"https://script.google.com/macros/s/AKfycbwiefKmCIG6au5RX4CkEqvLCI8sn1ckHAhCo_cjyiWf87SOqn_7sW9L_LzICR0N8G-Vjg/exec",
+{
+method:"POST",
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
+},
+mode:"no-cors",
+body:JSON.stringify(payload)
+}
+);
+
+
+document.getElementById("result").innerHTML=
+
+`<div class="success">
+
+<b>✅ Commande ${id} envoyée !</b>
 
 Votre commande a été transmise à la direction.
 
 Sous-total : ${euro(subtotal)}
-Frais de livraison : ${euro(deliveryFee)}
-TOTAL : ${euro(t)}</div>`;
 
- }catch(e){
-   alert("La commande n'a pas pu être envoyée. Vérifie le déploiement Google Apps Script.");
- }
-}}
+Frais de livraison : ${euro(deliveryFee)}
+
+TOTAL : ${euro(t)}
+
+</div>`;
+
+
+}catch(e){
+
+alert(
+"La commande n'a pas pu être envoyée. Vérifie le déploiement Google Apps Script."
+);
+
+}
+
+}
+
+
 render();
-</script></body></html>
+
+</script>
+
+</body>
+</html>
