@@ -11,7 +11,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#eef5ff;color:#132238}head
 <div class="card"><h2>🧾 Commander</h2><div class="grid">
 <div><label>Entreprise / Client *</label><input id="client"></div><div><label>Responsable *</label><input id="resp"></div>
 <div><label>Téléphone RP</label><input id="phone"></div><div><label>Discord</label><input id="discord"></div>
-<div><label>Réception</label><select id="delivery"><option>Livraison</option><option>Retrait sur place</option></select></div>
+<div><label>Réception</label><select id="delivery"><option>Livraison à domicile</option><option>Retrait sur place</option></select></div>
 <div><label>Date souhaitée</label><input id="date" type="date"></div></div>
 <div style="margin-top:14px"><label>Commentaire</label><textarea id="notes"></textarea></div>
 <button class="btn" onclick="sendOrder()">✅ Préparer ma commande</button><div id="result"></div></div>
@@ -24,7 +24,61 @@ const euro=n=>new Intl.NumberFormat("fr-FR").format(n)+" €";
 function render(){let e=document.getElementById("products");e.innerHTML="";products.forEach((p,i)=>{let q=cart[i]||0;e.innerHTML+=`<div class="product"><div><b>${p.name}</b><div class="price">${euro(p.price)}</div></div><div class="qty"><button onclick="chg(${i},-1)">−</button><b>${q}</b><button onclick="chg(${i},1)">+</button></div></div>`});total()}
 function chg(i,d){cart[i]=Math.max(0,(cart[i]||0)+d);render()}
 function total(){let t=products.reduce((s,p,i)=>s+p.price*(cart[i]||0),0);document.getElementById("total").textContent=euro(t);return t}
-function sendOrder(){let chosen=products.map((p,i)=>({p,i,q:cart[i]||0})).filter(x=>x.q);let c=document.getElementById("client").value.trim(),r=document.getElementById("resp").value.trim();if(!c||!r||!chosen.length){alert("Renseigne le client, le responsable et ajoute au moins un produit.");return}
-let id="CMD-"+Math.random().toString(36).slice(2,8).toUpperCase(),t=total();let s=`COMMANDE ${id}\nClient : ${c}\nResponsable : ${r}\nTéléphone : ${document.getElementById("phone").value}\nDiscord : ${document.getElementById("discord").value}\nRéception : ${document.getElementById("delivery").value}\nDate : ${document.getElementById("date").value||"Non précisée"}\n\nPRODUITS\n`;chosen.forEach(x=>s+=`- ${x.p.name} x${x.q} = ${euro(x.p.price*x.q)}\n`);s+=`\nTOTAL : ${euro(t)}\nCommentaire : ${document.getElementById("notes").value||"Aucun"}`;navigator.clipboard?.writeText(s);document.getElementById("result").innerHTML=`<div class="success"><b>Commande ${id} prête ✅</b>\n\n${s}\n\nLe récapitulatif a été copié. Envoie-le sur le Discord du grossiste.</div>`}
+async function sendOrder(){
+ let chosen=products.map((p,i)=>({p,i,q:cart[i]||0})).filter(x=>x.q);
+ let c=document.getElementById("client").value.trim();
+ let r=document.getElementById("resp").value.trim();
+
+ if(!c||!r||!chosen.length){
+   alert("Renseigne le client, le responsable et ajoute au moins un produit.");
+   return;
+ }
+
+ let id="CMD-"+Math.random().toString(36).slice(2,8).toUpperCase();
+
+ let subtotal=chosen.reduce((s,x)=>s+x.p.price*x.q,0);
+ let delivery=document.getElementById("delivery").value;
+ let deliveryFee=delivery==="Livraison à domicile"?30:0;
+ let t=subtotal+deliveryFee;
+
+ let productText=chosen
+   .map(x=>`${x.p.name} x${x.q} — ${euro(x.p.price*x.q)}`)
+   .join("\n");
+
+ let payload={
+   id:id,
+   client:c,
+   responsable:r,
+   phone:document.getElementById("phone").value,
+   discord:document.getElementById("discord").value,
+   delivery:delivery,
+   deliveryFee:deliveryFee,
+   date:document.getElementById("date").value||"Non précisée",
+   products:productText,
+   total:t,
+   notes:document.getElementById("notes").value||"Aucun"
+ };
+
+ try{
+   await fetch("https://script.google.com/macros/s/AKfycbwiefKmCIG6au5RX4CkEqvLCI8sn1ckHAhCo_cjyiWf87SOqn_7sW9L_LzICR0N8G-Vjg/exec",{
+     method:"POST",
+     headers:{"Content-Type":"text/plain;charset=utf-8"},
+     mode:"no-cors",
+     body:JSON.stringify(payload)
+   });
+
+   document.getElementById("result").innerHTML=
+   `<div class="success"><b>✅ Commande ${id} envoyée !</b>
+
+Votre commande a été transmise à la direction.
+
+Sous-total : ${euro(subtotal)}
+Frais de livraison : ${euro(deliveryFee)}
+TOTAL : ${euro(t)}</div>`;
+
+ }catch(e){
+   alert("La commande n'a pas pu être envoyée. Vérifie le déploiement Google Apps Script.");
+ }
+}}
 render();
 </script></body></html>
