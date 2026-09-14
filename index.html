@@ -30,7 +30,7 @@ label{font-weight:bold;font-size:14px;display:block;margin-bottom:6px}
 <div><label>Responsable *</label><input id="resp"></div>
 <div><label>Téléphone RP</label><input id="phone"></div>
 <div><label>Discord</label><input id="discord"></div>
-<div><label>Réception</label><select id="delivery"><option value="Livraison à domicile">Livraison à domicile (+30 €)</option><option value="Retrait sur place">Retrait sur place (gratuit)</option></select></div>
+<div><label>Réception</label><select id="delivery"><option value="Livraison à domicile">Livraison à domicile (+100 €)</option><option value="Retrait sur place">Retrait sur place (30)</option></select></div>
 <div><label>Date souhaitée</label><input id="date" type="date"></div>
 </div>
 <div style="margin-top:14px"><label>Commentaire</label><textarea id="notes"></textarea></div>
@@ -114,7 +114,7 @@ async function sendOrder(){
  let id="CMD-"+Math.random().toString(36).slice(2,8).toUpperCase();
  let subtotal=chosen.reduce((s,x)=>s+x.p.price*x.q,0);
  let delivery=document.getElementById("delivery").value;
- let deliveryFee=delivery==="Livraison à domicile"?30:0;
+ let deliveryFee=delivery==="Livraison à domicile"?100:0;
  let t=subtotal+deliveryFee;
  let productText=chosen.map(x=>`${x.p.name} × ${x.q} — ${euro(x.p.price*x.q)}`).join("\n");
 
