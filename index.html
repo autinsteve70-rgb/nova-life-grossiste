@@ -30,7 +30,7 @@ label{font-weight:bold;font-size:14px;display:block;margin-bottom:6px}
 <div><label>Responsable *</label><input id="resp"></div>
 <div><label>Téléphone RP</label><input id="phone"></div>
 <div><label>Discord</label><input id="discord"></div>
-<div><label>Réception</label><select id="delivery"><option value="Livraison à domicile">Livraison à domicile (+100 €)</option><option value="Retrait sur place">Retrait sur place (30)</option></select></div>
+<div><label>Réception</label><select id="delivery"><option value="Retrait sur place">Retrait sur place (gratuit)</option></select></div>
 <div><label>Date souhaitée</label><input id="date" type="date"></div>
 </div>
 <div style="margin-top:14px"><label>Commentaire</label><textarea id="notes"></textarea></div>
@@ -40,44 +40,44 @@ label{font-weight:bold;font-size:14px;display:block;margin-bottom:6px}
 <script>
 const products=[
 {name:'Bougie',price:80},
-{name:'Courroie',price:120},
-{name:'Batterie',price:200},
-{name:'Soda',price:5},
-{name:'Chips',price:10},
-{name:'Saucisson',price:10},
-{name:'Eau',price:7},
-{name:'Fromage',price:7},
+{name:'Courroie',price:180},
+{name:'Batterie',price:500},
+{name:'Soda',price:15},
+{name:'Chips',price:12},
+{name:'Saucisson',price:20},
+{name:'Eau',price:10},
+{name:'Fromage',price:25},
 {name:'Pomme',price:8},
 {name:'Poire',price:8},
-{name:'Pizza',price:7},
-{name:'Frite',price:7},
-{name:'Essence vide',price:12},
-{name:'Farine',price:10},
-{name:'Sucre',price:8},
-{name:'Lait',price:12},
-{name:'Chocolat',price:13},
-{name:'Croissant pas cuit',price:6},
-{name:'Pomme de terre pas cuite',price:6},
-{name:'Salade',price:5},
-{name:'Pain burger',price:5},
-{name:'Burger double face',price:4},
-{name:'Carton burger',price:1},
-{name:'Gâteau religieuse',price:13},
-{name:'Batterie de recharge',price:50},
-{name:'Graine de tomate',price:3},
-{name:'Carton pizza',price:5},
-{name:'Biscuit',price:7},
-{name:'Sac de pomme de terre',price:5},
-{name:'Carton frite',price:5},
-{name:'Huile',price:9},
-{name:'Pomme de terre épluchée',price:8},
+{name:'Pizza',price:45},
+{name:'Frite',price:20},
+{name:'Essence vide',price:50},
+{name:'Farine',price:20},
+{name:'Sucre',price:18},
+{name:'Lait',price:15},
+{name:'Chocolat',price:25},
+{name:'Croissant pas cuit',price:15},
+{name:'Pomme de terre pas cuite',price:12},
+{name:'Salade',price:10},
+{name:'Pain burger',price:15},
+{name:'Burger double face',price:40},
+{name:'Carton burger',price:10},
+{name:'Gâteau religieuse',price:35},
+{name:'Batterie de recharge',price:250},
+{name:'Graine de tomate',price:10},
+{name:'Carton pizza',price:10},
+{name:'Biscuit',price:12},
+{name:'Sac de pomme de terre',price:35},
+{name:'Carton frite',price:25},
+{name:'Huile',price:25},
+{name:'Pomme de terre épluchée',price:18},
 {name:'Baguette',price:12},
 {name:'Capsule Forptissimo',price:8},
 {name:'Capsule Forza',price:8},
 {name:'Capsule Lungo',price:8},
 {name:'Capsule Ristretto',price:8},
-{name:'Chocolat en poudre',price:12},
-{name:'Lait en poudre',price:13}
+{name:'Chocolat en poudre',price:20},
+{name:'Lait en poudre',price:20}
 ];
 let cart={};
 const euro=n=>new Intl.NumberFormat("fr-FR").format(n)+" €";
@@ -85,7 +85,7 @@ const euro=n=>new Intl.NumberFormat("fr-FR").format(n)+" €";
 function total(){
  let subtotal=products.reduce((s,p,i)=>s+p.price*(cart[i]||0),0);
  let delivery=document.getElementById("delivery").value;
- let deliveryFee=delivery==="Livraison à domicile"?30:0;
+ let deliveryFee=delivery==="Point de rencontre"?30:0;
  let finalTotal=subtotal+deliveryFee;
  document.getElementById("total").textContent=euro(finalTotal);
  return finalTotal;
@@ -114,7 +114,7 @@ async function sendOrder(){
  let id="CMD-"+Math.random().toString(36).slice(2,8).toUpperCase();
  let subtotal=chosen.reduce((s,x)=>s+x.p.price*x.q,0);
  let delivery=document.getElementById("delivery").value;
- let deliveryFee=delivery==="Livraison à domicile"?100:0;
+ let deliveryFee=delivery==="Point de rencontre"?30:0;
  let t=subtotal+deliveryFee;
  let productText=chosen.map(x=>`${x.p.name} × ${x.q} — ${euro(x.p.price*x.q)}`).join("\n");
 
