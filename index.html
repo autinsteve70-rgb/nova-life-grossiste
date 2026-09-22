@@ -54,6 +54,7 @@ main{max-width:1400px;margin:0 auto;padding:34px 28px 80px}
 </style>
 </head>
 <body>
+<iframe name="order_submit_frame" style="display:none"></iframe>
 <header>
   <div class="logo"><span class="logo-mark">◆</span><span>LE GROSSISTE<br><small style="font-size:10px;color:#9eb0c3;letter-spacing:1px">VOS PRODUITS, NOTRE ENGAGEMENT</small></span></div>
   <nav><a class="active" href="#">⌂ Accueil</a><a href="#commande">🛒 Passer commande</a><a href="#info">ⓘ Informations</a><a href="#contact">✉ Contact</a></nav>
@@ -590,7 +591,7 @@ main{max-width:1400px;margin:0 auto;padding:34px 28px 80px}
 
 <script>
 const PRODUCTS = [["Bougie de voiture", 130], ["Courroie", 100], ["Batterie", 180], ["Soda", 10], ["Chips", 8], ["Saucisson", 7], ["Eau", 6], ["Fromage", 15], ["Pomme", 5], ["Poire", 5], ["Pizza", 30], ["Frite", 12], ["Essence vide", 25], ["Farine", 10], ["Sucre", 9], ["Lait", 8], ["Chocolat", 15], ["Croissant pas cuit", 8], ["Pomme de terre pas cuite", 7], ["Salade", 6], ["Pain burger", 8], ["Burger double face", 25], ["Carton burger", 6], ["Gâteau religieuse", 22], ["Batterie de recharge", 150], ["Graine de tomate", 6], ["Carton pizza", 6], ["Biscuit", 7], ["Sac de pomme de terre", 20], ["Carton frite", 15], ["Huile", 12], ["Pomme de terre épluchée", 10], ["Baguette", 6], ["Capsule Forptissimo", 5], ["Capsule Forza", 5], ["Capsule Lungo", 5], ["Capsule Ristretto", 5], ["Chocolat en poudre", 10], ["Lait en poudre", 10], ["Bouteille de vin vide", 2]];
-const ENDPOINT = 'https://script.google.com/macros/s/AKfycbxm2VbgOug3i-2Srwgos2GdbpuAK3DNZloxUh_EEZ6d/exec';
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbxBNA10R_4zexfTfspsZJb_04sg37PkNP_hQh_8PsGrajxz3a4WG40INEt91ySvN_fwVA/exec';
 const qty = Array(PRODUCTS.length).fill(0);
 
 function money(n){ return new Intl.NumberFormat('fr-FR').format(Math.round(n)) + ' €'; }
@@ -655,7 +656,18 @@ document.getElementById('send').onclick=async()=>{
   };
   const btn=document.getElementById('send');btn.disabled=true;btn.textContent='Envoi...';
   try{
-    await fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=ENDPOINT;
+    form.target='order_submit_frame';
+    const input=document.createElement('input');
+    input.type='hidden';
+    input.name='payload';
+    input.value=JSON.stringify(payload);
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+    form.remove();
     document.getElementById('status').style.display='block';
     document.getElementById('status').textContent='Commande '+id+' envoyée.';
   }catch(e){alert('Erreur lors de l’envoi.');}
