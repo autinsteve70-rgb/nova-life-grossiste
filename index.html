@@ -657,7 +657,7 @@ document.getElementById('send').onclick=async()=>{
   const btn=document.getElementById('send');btn.disabled=true;btn.textContent='Envoi...';
   try{
     const form=document.createElement('form');
-    form.method='POST';
+    form.method='GET';
     form.action=ENDPOINT;
     form.target='order_submit_frame';
     const input=document.createElement('input');
