@@ -26,6 +26,56 @@ function openModal(){if(!Object.keys(cart).length)return alert("Ajoute au moins 
 document.getElementById("close").onclick=()=>document.getElementById("modal").classList.remove("open");
 document.getElementById("mode").onchange=e=>document.getElementById("address").style.display=e.target.value==="home"?"block":"none";document.getElementById("address").style.display="none";
 document.querySelectorAll(".pill").forEach(b=>b.onclick=()=>{cat=b.dataset.cat;document.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));b.classList.add("active");draw()});
-document.getElementById("search").oninput=draw;document.getElementById("login").onclick=()=>alert("La connexion Google sera activée dans l'étape serveur Firebase.");
+document.getElementById("search").oninput=draw;
 document.getElementById("send").onclick=()=>{if(!client.value.trim()||!discord.value.trim())return alert("Renseigne ton nom et ton Discord.");status.textContent="Formulaire prêt. L'envoi Discord sera activé après le branchement du backend sécurisé.";};draw();
-</script></body></html>
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBCuU79LOtDk4TrQpQzaSIHH4iBgldh1qM",
+  authDomain: "nova-grossiste.firebaseapp.com",
+  projectId: "nova-grossiste",
+  storageBucket: "nova-grossiste.firebasestorage.app",
+  messagingSenderId: "1054828423076",
+  appId: "1:1054828423076:web:eccfd6ad132cbab3de4331",
+  measurementId: "G-YT6RLTP7XL"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
+
+const loginButton = document.getElementById("login");
+
+function updateAccount(user) {
+  if (!loginButton) return;
+  if (user) {
+    const name = user.displayName || user.email || "Compte Google";
+    loginButton.textContent = "✓ " + name;
+    loginButton.title = user.email || "";
+  } else {
+    loginButton.textContent = "Connexion Google";
+    loginButton.title = "";
+  }
+}
+
+auth.onAuthStateChanged(updateAccount);
+
+loginButton.onclick = async () => {
+  if (auth.currentUser) {
+    const leave = confirm("Déconnexion du compte Google ?");
+    if (leave) await auth.signOut();
+    return;
+  }
+
+  try {
+    await auth.signInWithPopup(provider);
+  } catch (error) {
+    console.error(error);
+    alert("Connexion Google impossible : " + (error.message || "erreur inconnue"));
+  }
+};
+</script>
+
+</body></html>
